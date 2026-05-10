@@ -80,6 +80,42 @@ button:disabled {
   padding: 10px;
 }
 
+.terminal-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(125, 255, 138, 0.08);
+  flex-wrap: wrap;
+}
+
+.terminal-nav-label {
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.terminal-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.terminal-nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  text-transform: lowercase;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+}
+
+.terminal-nav-links a:hover {
+  color: var(--accent);
+  border-bottom-color: currentColor;
+}
+
 .prompt-row {
   display: flex;
   align-items: center;

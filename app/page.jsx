@@ -200,6 +200,21 @@ export default function FaucetPage() {
       <Script id="turnstile-script" src={TURNSTILE_SRC} strategy="afterInteractive" />
       <main className="shell">
         <section className="console panel">
+          <nav className="terminal-nav" aria-label="Primary">
+            <span className="terminal-nav-label">nav</span>
+            <div className="terminal-nav-links">
+              <a href="https://veltrix-explorer.404piyush.me" target="_blank" rel="noreferrer noopener">
+                explorer
+              </a>
+              <a href="https://veltrix-bridge.vercel.app" target="_blank" rel="noreferrer noopener">
+                bridge
+              </a>
+              <a href="https://github.com/404Piyush/veltrix-faucet" target="_blank" rel="noreferrer noopener">
+                github
+              </a>
+            </div>
+          </nav>
+
           <div className="prompt-row">
             <span className="prompt">root@veltrix:~$</span>
             <span className="prompt-text">request faucet drip</span>
@@ -208,24 +223,24 @@ export default function FaucetPage() {
             </button>
           </div>
 
-            <div className="terminal-grid">
-              <form className="claim-form terminal-box" onSubmit={submitClaim}>
-                <label className="field">
-                  <span>recipient address</span>
-                  <div className="input-shell">
-                    <span className="input-prefix">veltrix&gt;</span>
-                    <input
-                      value={address}
-                      onChange={(event) => setAddress(event.target.value)}
-                      type="text"
-                      placeholder="0x..."
-                      autoComplete="off"
-                      spellCheck="false"
-                      autoCapitalize="off"
-                      required
-                    />
-                  </div>
-                </label>
+          <div className="terminal-grid">
+            <form className="claim-form terminal-box" onSubmit={submitClaim}>
+              <label className="field">
+                <span>recipient address</span>
+                <div className="input-shell">
+                  <span className="input-prefix">veltrix&gt;</span>
+                  <input
+                    value={address}
+                    onChange={(event) => setAddress(event.target.value)}
+                    type="text"
+                    placeholder="0x..."
+                    autoComplete="off"
+                    spellCheck="false"
+                    autoCapitalize="off"
+                    required
+                  />
+                </div>
+              </label>
 
               <div className="turnstile-shell">
                 <div className="turnstile-label">turnstile</div>
