@@ -11,6 +11,15 @@ function shortAddress(value, head = 6, tail = 4) {
   return `${value.slice(0, head)}...${value.slice(-tail)}`;
 }
 
+function formatCompactAmount(value, digits = 1) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return value || "...";
+  return amount
+    .toFixed(digits)
+    .replace(/\.0+$/, "")
+    .replace(/(\.\d*?)0+$/, "$1");
+}
+
 function line(label, value, tone = "neutral") {
   return { label, value, tone };
 }
@@ -243,7 +252,6 @@ export default function FaucetPage() {
               </label>
 
               <div className="turnstile-shell">
-                <div className="turnstile-label">turnstile</div>
                 <div ref={turnstileContainerRef} className="turnstile-wrap" />
               </div>
 
@@ -258,8 +266,6 @@ export default function FaucetPage() {
                 <dl className="meta-grid">
                   <dt>chain id</dt>
                   <dd>{health?.chainId || "..."}</dd>
-                  <dt>expected</dt>
-                  <dd>{health?.chainIdExpected || "..."}</dd>
                   <dt>symbol</dt>
                   <dd>{health?.nativeSymbol || "..."}</dd>
                   <dt>ready</dt>
@@ -273,11 +279,9 @@ export default function FaucetPage() {
                   <dt>address</dt>
                   <dd className="mono">{health ? shortAddress(health.faucetAddress, 8, 6) : "..."}</dd>
                   <dt>balance</dt>
-                  <dd>{health ? `${health.balanceFormatted} ${health.nativeSymbol}` : "..."}</dd>
+                  <dd>{health ? `${formatCompactAmount(health.balanceFormatted, 1)} ${health.nativeSymbol}` : "..."}</dd>
                   <dt>drip</dt>
                   <dd>{config ? `${config.faucetAmountFormatted} ${health?.nativeSymbol || "VEL"}` : "..."}</dd>
-                  <dt>captcha</dt>
-                  <dd>{health ? (health.turnstileConfigured ? "configured" : "missing") : "..."}</dd>
                 </dl>
                 <button className="ghost ghost--full" type="button" onClick={copyFaucetAddress} disabled={!health?.faucetAddress}>
                   copy faucet address

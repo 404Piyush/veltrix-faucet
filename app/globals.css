@@ -201,8 +201,7 @@ button:disabled {
   gap: 8px;
 }
 
-.field span,
-.turnstile-label {
+.field span {
   color: var(--muted);
   font-size: 12px;
   text-transform: lowercase;
