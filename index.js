@@ -1,9 +1,10 @@
 require("dotenv").config();
 
+const path = require("node:path");
 const express = require("express");
 const cors = require("cors");
 
-const { getAllowedOrigin, getFaucetStatus, handleDripRequest } = require("./lib/faucet");
+const { getAllowedOrigin, getFaucetStatus, getPublicConfig, handleDripRequest } = require("./lib/faucet");
 
 const app = express();
 const allowedOrigin = getAllowedOrigin();
@@ -14,6 +15,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.static(path.resolve(__dirname)));
 
 app.get("/api/health", async (_req, res) => {
   try {
@@ -25,6 +27,13 @@ app.get("/api/health", async (_req, res) => {
       error: error.message,
     });
   }
+});
+
+app.get("/api/turnstile-config", (_req, res) => {
+  res.json({
+    ok: true,
+    ...getPublicConfig(),
+  });
 });
 
 app.options("/api/faucet", (_req, res) => {
@@ -41,6 +50,10 @@ app.post("/api/faucet", async (req, res) => {
     const result = await handleDripRequest({
       address: req.body?.address,
       ip: clientIp,
+      turnstileToken:
+        req.body?.turnstileToken ||
+        req.body?.cfTurnstileToken ||
+        req.body?.["cf-turnstile-response"],
     });
 
     res.json(result);

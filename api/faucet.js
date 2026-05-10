@@ -27,6 +27,10 @@ module.exports = async function handler(req, res) {
     const result = await handleDripRequest({
       address: req.body?.address,
       ip: clientIp,
+      turnstileToken:
+        req.body?.turnstileToken ||
+        req.body?.cfTurnstileToken ||
+        req.body?.["cf-turnstile-response"],
     });
     res.status(200).json(result);
   } catch (error) {

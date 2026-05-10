@@ -1,24 +1,27 @@
 # Veltrix Faucet - Developer Handover
 
-## ⛲ Service State
+## Service State
 - **Platform:** Shared local Express server + Vercel API routes
-- **Endpoint:** `faucet-veltrix.404piyush.me`
+- **Homepage:** `/`
+- **API:** `/api/health`, `/api/turnstile-config`, `/api/faucet`
 - **L2 Faucet Address:** Derived from `FAUCET_PRIVATE_KEY` at runtime
 - **Balance:** Must be checked from `/api/health`; do not trust stale markdown
-- **Native Symbol:** VELT
+- **Native Symbol:** `VELT`
+- **CAPTCHA:** Cloudflare Turnstile
 
-## 🛠️ Recent Changes
-1. **Service Creation:** Scaffolded a clean, independent faucet repository.
-2. **Key Security:** Configured `.env` and `.gitignore` to protect the `FAUCET_PRIVATE_KEY`.
-3. **Runtime Fixes:** Removed hardcoded localhost RPC dependency, normalized private key parsing, and added health/cooldown checks.
-4. **Deployment Shape:** Added Vercel-compatible API routes under `api/`.
-5. **Drip Default:** Default faucet payout is now `0.001 VELT` per request unless overridden by `FAUCET_AMOUNT`.
+## Recent Changes
+1. Removed hardcoded localhost RPC dependency.
+2. Normalized private key parsing.
+3. Added homepage so the root domain no longer returns a 404.
+4. Added Turnstile verification before drips are sent.
+5. Kept default payout at `0.001 VELT` per request.
 
-## 🚀 Usage
-- **Health:** `GET /api/health`
-- **Endpoint:** `POST /api/faucet`
-- **Payload:** `{ "address": "0x..." }`
+## Required Env Vars
+- `FAUCET_PRIVATE_KEY`
+- `L2_RPC_URL`
+- `TURNSTILE_SITE_KEY`
+- `TURNSTILE_SECRET_KEY`
 
-## 🚧 Next for Dev
-- Fund the actual key-derived faucet address returned by `/api/health`.
-- Upgrade abuse protection beyond in-memory cooldowns if public traffic becomes meaningful.
+## Next for Dev
+- Replace in-memory cooldowns with durable storage if traffic grows.
+- Add analytics or admin logs for claim events.

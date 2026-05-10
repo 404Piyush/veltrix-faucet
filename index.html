@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veltrix Faucet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div class="hero__eyebrow">Veltrix Public Faucet</div>
+        <h1>Claim a small amount of VELT for gas.</h1>
+        <p class="hero__copy">
+          One faucet claim is protected by Cloudflare Turnstile and the faucet cooldown. Use this only for testnet gas.
+        </p>
+      </section>
+
+      <section class="panel panel--primary">
+        <div class="panel__header">
+          <div>
+            <div class="panel__label">Claim</div>
+            <h2>Request testnet VELT</h2>
+          </div>
+          <button id="refresh-status" class="ghost-button" type="button">Refresh</button>
+        </div>
+
+        <form id="claim-form" class="claim-form">
+          <label class="field">
+            <span>Recipient address</span>
+            <input id="address" name="address" type="text" placeholder="0x..." autocomplete="off" required />
+          </label>
+
+          <div id="turnstile-wrap" class="turnstile-wrap"></div>
+
+          <button id="submit-button" class="primary-button" type="submit">Claim faucet drip</button>
+        </form>
+
+        <div id="message" class="message" aria-live="polite"></div>
+      </section>
+
+      <section class="grid">
+        <article class="panel">
+          <div class="panel__label">Network</div>
+          <dl class="meta-list" id="network-meta"></dl>
+        </article>
+
+        <article class="panel">
+          <div class="panel__label">Faucet</div>
+          <dl class="meta-list" id="faucet-meta"></dl>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
