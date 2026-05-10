@@ -4,13 +4,14 @@ Veltrix faucet for dispensing small amounts of native `VEL` on the public L2.
 
 ## What It Does
 
-- Serves a real homepage at `/`
+- Next.js app router homepage at `/`
 - Exposes `GET /api/health`
 - Exposes `GET /api/turnstile-config`
 - Exposes `POST /api/faucet`
 - Signs native-token transfers with a server-side faucet key
 - Protects claims with Cloudflare Turnstile
 - Applies a basic in-memory cooldown by address and client IP
+- Uses a green terminal UI with an interactive 3D core
 - Works both locally and on Vercel
 
 ## Local Run
@@ -21,20 +22,20 @@ cp .env.example .env
 npm run dev
 ```
 
-Server starts on `http://localhost:8080`.
+Next dev starts on `http://localhost:3000`.
 
 ## API
 
 Health:
 
 ```bash
-curl http://localhost:8080/api/health
+curl http://localhost:3000/api/health
 ```
 
 Drip:
 
 ```bash
-curl -X POST http://localhost:8080/api/faucet \
+curl -X POST http://localhost:3000/api/faucet \
   -H 'content-type: application/json' \
   --data '{"address":"0x000000000000000000000000000000000000dead","turnstileToken":"<token>"}'
 ```
