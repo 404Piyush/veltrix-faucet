@@ -11,7 +11,7 @@ Veltrix faucet for dispensing small amounts of native `VEL` on the public L2.
 - Signs native-token transfers with a server-side faucet key
 - Protects claims with Cloudflare Turnstile
 - Applies a basic in-memory cooldown by address and client IP
-- Uses a green terminal UI with an interactive 3D core
+- Uses a compact black terminal UI with green accents
 - Works both locally and on Vercel
 
 ## Local Run

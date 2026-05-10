@@ -13,13 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.6.1",
     "dotenv": "^17.4.2",
     "ethers": "^6.16.0",
     "next": "^16.2.6",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "three": "^0.184.0"
+    "react-dom": "^19.2.6"
   }
 }

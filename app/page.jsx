@@ -2,7 +2,6 @@
 
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
-import { FaucetCore } from "../components/FaucetCore";
 
 const TURNSTILE_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 
@@ -19,10 +18,10 @@ function line(label, value, tone = "neutral") {
 export default function FaucetPage() {
   const [status, setStatus] = useState({ health: null, config: null, loading: true });
   const [address, setAddress] = useState("");
-  const [message, setMessage] = useState({ text: "Booting terminal...", tone: "neutral" });
+  const [message, setMessage] = useState({ text: "booting...", tone: "neutral" });
   const [events, setEvents] = useState([
-    line("BOOT", "Terminal initialized", "neutral"),
-    line("SYNC", "Awaiting live telemetry", "neutral"),
+    line("BOOT", "terminal initialized", "neutral"),
+    line("SYNC", "awaiting telemetry", "neutral"),
   ]);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -90,25 +89,25 @@ export default function FaucetPage() {
         theme: "dark",
         callback(token) {
           setTurnstileToken(token);
-          showMessage("Challenge cleared. Claim is armed.", "success");
-          pushEvent("CAPTCHA", "Challenge passed", "success");
+          showMessage("challenge cleared.", "success");
+          pushEvent("CAPTCHA", "challenge passed", "success");
         },
         "expired-callback"() {
           setTurnstileToken("");
-          showMessage("Challenge expired. Run it again.", "error");
-          pushEvent("CAPTCHA", "Challenge expired", "error");
+          showMessage("challenge expired.", "error");
+          pushEvent("CAPTCHA", "challenge expired", "error");
         },
         "error-callback"() {
           setTurnstileToken("");
-          showMessage("Turnstile failed to load. Refresh and retry.", "error");
-          pushEvent("CAPTCHA", "Widget error", "error");
+          showMessage("turnstile failed to load.", "error");
+          pushEvent("CAPTCHA", "widget error", "error");
         },
       });
 
-      showMessage("Solve Turnstile to unlock the claim button.");
+      showMessage("solve Turnstile to unlock the claim button.");
     } catch (error) {
       showMessage(error.message, "error");
-      pushEvent("CAPTCHA", "Widget load failed", "error");
+      pushEvent("CAPTCHA", "widget load failed", "error");
     }
   }
 
@@ -120,17 +119,13 @@ export default function FaucetPage() {
       const [healthData, configData] = await Promise.all([healthRes.json(), configRes.json()]);
 
       setStatus({ health: healthData, config: configData, loading: false });
-      pushEvent(
-        "SYNC",
-        `Chain ${healthData.chainId} / ${healthData.ready ? "online" : "not ready"}`,
-        healthData.ready ? "success" : "warn",
-      );
+      pushEvent("SYNC", `chain ${healthData.chainId} / ${healthData.ready ? "online" : "not ready"}`, healthData.ready ? "success" : "warn");
       await renderTurnstile(configData);
-      showMessage(healthData.ready ? "Live faucet online." : "Faucet is not ready yet.", healthData.ready ? "success" : "warn");
+      showMessage(healthData.ready ? "faucet online." : "faucet not ready.", healthData.ready ? "success" : "warn");
     } catch (error) {
       setStatus((current) => ({ ...current, loading: false }));
-      showMessage(`Failed to sync status: ${error.message}`, "error");
-      pushEvent("SYNC", "Status fetch failed", "error");
+      showMessage(`sync failed: ${error.message}`, "error");
+      pushEvent("SYNC", "status fetch failed", "error");
     } finally {
       setSyncing(false);
     }
@@ -139,26 +134,26 @@ export default function FaucetPage() {
   async function copyFaucetAddress() {
     if (!health?.faucetAddress || !navigator.clipboard) return;
     await navigator.clipboard.writeText(health.faucetAddress);
-    showMessage("Faucet address copied.", "success");
-    pushEvent("COPY", "Faucet address copied", "success");
+    showMessage("faucet address copied.", "success");
+    pushEvent("COPY", "faucet address copied", "success");
   }
 
   async function submitClaim(event) {
     event.preventDefault();
 
     if (!address.trim()) {
-      showMessage("Enter a recipient address first.", "error");
+      showMessage("enter a recipient address.", "error");
       return;
     }
 
     if (!turnstileToken) {
-      showMessage("Solve Turnstile before claiming.", "error");
+      showMessage("solve Turnstile first.", "error");
       return;
     }
 
     setSubmitting(true);
-    showMessage("Submitting claim...");
-    pushEvent("TX", `Requesting drip for ${shortAddress(address.trim())}`, "neutral");
+    showMessage("submitting claim...");
+    pushEvent("TX", `requesting drip for ${shortAddress(address.trim())}`, "neutral");
 
     try {
       const response = await fetch("/api/faucet", {
@@ -174,12 +169,12 @@ export default function FaucetPage() {
 
       const payload = await response.json();
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Claim failed");
+        throw new Error(payload.error || "claim failed");
       }
 
       const shortTx = shortAddress(payload.txHash, 10, 8);
-      showMessage(`Sent ${payload.amountFormatted} ${payload.nativeSymbol}. Tx ${shortTx}`, "success");
-      pushEvent("TX", `Confirmed ${shortTx}`, "success");
+      showMessage(`sent ${payload.amountFormatted} ${payload.nativeSymbol}. tx ${shortTx}`, "success");
+      pushEvent("TX", `confirmed ${shortTx}`, "success");
       setAddress("");
       setTurnstileToken("");
 
@@ -190,7 +185,7 @@ export default function FaucetPage() {
       await refreshStatus();
     } catch (error) {
       showMessage(error.message, "error");
-      pushEvent("TX", "Claim failed", "error");
+      pushEvent("TX", "claim failed", "error");
     } finally {
       setSubmitting(false);
     }
@@ -204,150 +199,89 @@ export default function FaucetPage() {
     <>
       <Script id="turnstile-script" src={TURNSTILE_SRC} strategy="afterInteractive" />
       <main className="shell">
-        <header className="masthead panel">
-          <div className="masthead-copy">
-            <div className="eyebrow">Veltrix Faucet / Terminal UI</div>
-            <h1>Green-black faucet console for live VEL drips.</h1>
-            <p className="copy">
-              Claim tiny VEL drops through a CRT-style interface with live network telemetry and one usable 3D core.
-            </p>
-          </div>
-          <div className="status-strip">
-            <span className={`chip ${health?.ready ? "chip--good" : "chip--warn"}`}>
-              {health?.ready ? "ONLINE" : status.loading ? "SYNC" : "CHECK"}
-            </span>
-            <span className="chip">VEL</span>
-            <span className="chip">{health ? `CHAIN ${health.chainId}` : "CHAIN ?"}</span>
-            <span className="chip">{health?.turnstileConfigured ? "CAPTCHA READY" : "CAPTCHA OFF"}</span>
+        <header className="terminal-bar panel">
+          <div className="terminal-title">veltrix faucet</div>
+          <div className="terminal-meta">
+            <span>{health ? `chain ${health.chainId}` : "chain ..."}</span>
+            <span>{health?.ready ? "online" : status.loading ? "sync" : "check"}</span>
+            <span>VEL</span>
           </div>
         </header>
 
-        <section className="hero-grid">
-          <article className="panel panel--console">
-            <div className="panel-head">
-              <div>
-                <div className="eyebrow">Claim console</div>
-                <h2>Request a drip</h2>
+        <section className="console panel">
+          <div className="prompt-row">
+            <span className="prompt">root@veltrix:~$</span>
+            <span className="prompt-text">request faucet drip</span>
+            <button className="ghost" type="button" onClick={refreshStatus} disabled={syncing}>
+              {syncing ? "syncing" : "refresh"}
+            </button>
+          </div>
+
+          <div className="terminal-grid">
+            <form className="claim-form terminal-box" onSubmit={submitClaim}>
+              <label className="field">
+                <span>recipient address</span>
+                <input
+                  value={address}
+                  onChange={(event) => setAddress(event.target.value)}
+                  type="text"
+                  placeholder="0x..."
+                  autoComplete="off"
+                  spellCheck="false"
+                  required
+                />
+              </label>
+
+              <div className="turnstile-shell">
+                <div className="turnstile-label">turnstile</div>
+                <div ref={turnstileContainerRef} className="turnstile-wrap" />
               </div>
-              <button className="ghost" type="button" onClick={refreshStatus} disabled={syncing}>
-                {syncing ? "Syncing..." : "Refresh"}
+
+              <button className="primary" type="submit" disabled={submitting || syncing || !turnstileToken || !health?.ready}>
+                {submitting ? "submitting..." : "claim drip"}
               </button>
-            </div>
+            </form>
 
-            <div className="terminal-window">
-              <div className="terminal-lines">
-                <div>&gt; enter recipient address</div>
-                <div>&gt; solve captcha gate</div>
-                <div>&gt; send {health?.faucetAmountFormatted || "0.001"} VEL</div>
-              </div>
+            <div className="stack">
+              <article className="terminal-box">
+                <div className="section-label">network</div>
+                <dl className="meta-grid">
+                  <dt>chain id</dt>
+                  <dd>{health?.chainId || "..."}</dd>
+                  <dt>expected</dt>
+                  <dd>{health?.chainIdExpected || "..."}</dd>
+                  <dt>symbol</dt>
+                  <dd>{health?.nativeSymbol || "..."}</dd>
+                  <dt>ready</dt>
+                  <dd>{health ? (health.ready ? "yes" : "no") : "..."}</dd>
+                </dl>
+              </article>
 
-              <form className="claim-form" onSubmit={submitClaim}>
-                <label className="field">
-                  <span>Recipient address</span>
-                  <input
-                    value={address}
-                    onChange={(event) => setAddress(event.target.value)}
-                    type="text"
-                    placeholder="0x..."
-                    autoComplete="off"
-                    spellCheck="false"
-                    required
-                  />
-                </label>
-
-                <div className="turnstile-shell">
-                  <div className="turnstile-label">Turnstile gate</div>
-                  <div ref={turnstileContainerRef} className="turnstile-wrap" />
-                </div>
-
-                <button className="primary" type="submit" disabled={submitting || syncing || !turnstileToken || !health?.ready}>
-                  {submitting ? "Submitting..." : "Claim faucet drip"}
+              <article className="terminal-box">
+                <div className="section-label">faucet</div>
+                <dl className="meta-grid">
+                  <dt>address</dt>
+                  <dd className="mono">{health ? shortAddress(health.faucetAddress, 8, 6) : "..."}</dd>
+                  <dt>balance</dt>
+                  <dd>{health ? `${health.balanceFormatted} ${health.nativeSymbol}` : "..."}</dd>
+                  <dt>drip</dt>
+                  <dd>{config ? `${config.faucetAmountFormatted} ${health?.nativeSymbol || "VEL"}` : "..."}</dd>
+                  <dt>captcha</dt>
+                  <dd>{health ? (health.turnstileConfigured ? "configured" : "missing") : "..."}</dd>
+                </dl>
+                <button className="ghost ghost--full" type="button" onClick={copyFaucetAddress} disabled={!health?.faucetAddress}>
+                  copy faucet address
                 </button>
-              </form>
+              </article>
             </div>
+          </div>
 
-            <div className={`message message--${message.tone}`} aria-live="polite">
-              {message.text}
-            </div>
-          </article>
+          <div className={`message message--${message.tone}`} aria-live="polite">
+            {message.text}
+          </div>
 
-          <article className="panel panel--core">
-            <div className="panel-head">
-              <div>
-                <div className="eyebrow">Interactive 3D core</div>
-                <h2>Hover, drag, click</h2>
-              </div>
-              <span className="chip chip--ghost">Usable model</span>
-            </div>
-
-            <FaucetCore />
-
-            <div className="core-footer">
-              <div>
-                <div className="fineprint">Mode</div>
-                <div className="mono">{health?.ready ? "ready" : "waiting"}</div>
-              </div>
-              <div>
-                <div className="fineprint">Drip</div>
-                <div className="mono">{health?.faucetAmountFormatted || "0.001"} VEL</div>
-              </div>
-              <div>
-                <div className="fineprint">Cooldown</div>
-                <div className="mono">{health ? `${health.cooldownSeconds}s` : "..."}</div>
-              </div>
-            </div>
-          </article>
-        </section>
-
-        <section className="info-grid">
-          <article className="panel">
-            <div className="panel-head">
-              <div>
-                <div className="eyebrow">Network telemetry</div>
-                <h2>Chain status</h2>
-              </div>
-            </div>
-            <dl className="meta-grid">
-              <dt>Chain ID</dt>
-              <dd>{health?.chainId || "..."}</dd>
-              <dt>Expected</dt>
-              <dd>{health?.chainIdExpected || "..."}</dd>
-              <dt>Symbol</dt>
-              <dd>{health?.nativeSymbol || "..."}</dd>
-              <dt>Ready</dt>
-              <dd>{health ? (health.ready ? "online" : "check faucet") : "..."}</dd>
-            </dl>
-          </article>
-
-          <article className="panel">
-            <div className="panel-head">
-              <div>
-                <div className="eyebrow">Faucet telemetry</div>
-                <h2>Supply status</h2>
-              </div>
-              <button className="ghost" type="button" onClick={copyFaucetAddress} disabled={!health?.faucetAddress}>
-                Copy faucet
-              </button>
-            </div>
-            <dl className="meta-grid">
-              <dt>Faucet address</dt>
-              <dd className="mono">{health ? shortAddress(health.faucetAddress, 8, 6) : "..."}</dd>
-              <dt>Balance</dt>
-              <dd>{health ? `${health.balanceFormatted} ${health.nativeSymbol}` : "..."}</dd>
-              <dt>Drip size</dt>
-              <dd>{config ? `${config.faucetAmountFormatted} ${health?.nativeSymbol || "VEL"}` : "..."}</dd>
-              <dt>Captcha</dt>
-              <dd>{health ? (health.turnstileConfigured ? "Configured" : "Missing keys") : "..."}</dd>
-            </dl>
-          </article>
-
-          <article className="panel panel--log">
-            <div className="panel-head">
-              <div>
-                <div className="eyebrow">Activity log</div>
-                <h2>Terminal feed</h2>
-              </div>
-            </div>
+          <div className="feed terminal-box">
+            <div className="section-label">log</div>
             <div className="event-log">
               {events.map((event) => (
                 <div key={`${event.label}-${event.value}`} className={`event event--${event.tone}`}>
@@ -356,7 +290,7 @@ export default function FaucetPage() {
                 </div>
               ))}
             </div>
-          </article>
+          </div>
         </section>
       </main>
     </>

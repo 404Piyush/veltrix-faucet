@@ -8,7 +8,7 @@
 - Native symbol: `VEL`
 - CAPTCHA: Cloudflare Turnstile
 - Live production domain: `https://veltrix-faucet.404piyush.me`
-- UI: green-on-black terminal theme with an interactive 3D core
+- UI: compact black terminal theme with green accents
 
 ## Done
 1. Removed the hardcoded localhost RPC dependency.
