@@ -5,6 +5,7 @@ const express = require("express");
 const cors = require("cors");
 
 const { getAllowedOrigin, getFaucetStatus, getPublicConfig, handleDripRequest } = require("./lib/faucet");
+const { renderHomepage } = require("./lib/homepage");
 
 const app = express();
 const allowedOrigin = getAllowedOrigin();
@@ -15,6 +16,10 @@ app.use(
   })
 );
 app.use(express.json());
+app.get("/", (_req, res) => {
+  res.setHeader("cache-control", "public, max-age=0, must-revalidate");
+  res.type("html").send(renderHomepage());
+});
 app.use(express.static(path.resolve(__dirname)));
 
 app.get("/api/health", async (_req, res) => {
