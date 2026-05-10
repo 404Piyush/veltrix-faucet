@@ -64,9 +64,9 @@ button:disabled {
 }
 
 .shell {
-  width: min(1040px, calc(100vw - 16px));
+  width: min(1320px, calc(100vw - 24px));
   margin: 0 auto;
-  padding: 4px 0 18px;
+  padding: 12px 0 20px;
 }
 
 .panel {
@@ -77,6 +77,9 @@ button:disabled {
 }
 
 .console {
+  min-height: calc(100svh - 32px);
+  display: flex;
+  flex-direction: column;
   padding: 10px;
 }
 
@@ -173,7 +176,8 @@ button:disabled {
 .terminal-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
-  gap: 10px;
+  gap: 12px;
+  flex: 0 0 auto;
 }
 
 .stack {
@@ -341,6 +345,7 @@ button:disabled {
 .terminal-output {
   display: grid;
   gap: 6px;
+  margin-top: auto;
 }
 
 .terminal-line {
@@ -465,8 +470,8 @@ button:disabled {
 
 @media (max-width: 640px) {
   .shell {
-    width: min(100vw - 10px, 1040px);
-    padding-top: 6px;
+    width: min(100vw - 12px, 1320px);
+    padding-top: 8px;
   }
 
   .console {
