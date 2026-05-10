@@ -208,22 +208,22 @@ export default function FaucetPage() {
     <>
       <Script id="turnstile-script" src={TURNSTILE_SRC} strategy="afterInteractive" />
       <main className="shell">
-        <section className="console panel">
-          <nav className="terminal-nav" aria-label="Primary">
-            <span className="terminal-nav-label">nav</span>
-            <div className="terminal-nav-links">
-              <a href="https://veltrix-explorer.404piyush.me" target="_blank" rel="noreferrer noopener">
-                explorer
-              </a>
-              <a href="https://veltrix-bridge.vercel.app" target="_blank" rel="noreferrer noopener">
-                bridge
-              </a>
-              <a href="https://github.com/404Piyush/veltrix-faucet" target="_blank" rel="noreferrer noopener">
-                github
-              </a>
-            </div>
-          </nav>
+        <nav className="terminal-nav panel" aria-label="Primary">
+          <span className="terminal-nav-label">nav</span>
+          <div className="terminal-nav-links">
+            <a href="https://veltrix-explorer.404piyush.me" target="_blank" rel="noreferrer noopener">
+              explorer
+            </a>
+            <a href="https://veltrix-bridge.vercel.app" target="_blank" rel="noreferrer noopener">
+              bridge
+            </a>
+            <a href="https://github.com/404Piyush/veltrix-faucet" target="_blank" rel="noreferrer noopener">
+              github
+            </a>
+          </div>
+        </nav>
 
+        <section className="console panel">
           <div className="prompt-row">
             <span className="prompt">root@veltrix:~$</span>
             <span className="prompt-text">request faucet drip</span>
@@ -290,33 +290,34 @@ export default function FaucetPage() {
             </div>
           </div>
 
-          <div className={`message message--${message.tone}`} aria-live="polite">
-            {message.text}
+          <div className={`terminal-alert terminal-alert--${message.tone}`} aria-live="polite">
+            <span className="terminal-alert-label">alert</span>
+            <span className="terminal-alert-text">{message.text}</span>
           </div>
 
-          <div className="feed terminal-box">
-            <div className="section-label">log</div>
-            <div className="event-log">
-              {events.map((event) => (
-                <div key={`${event.label}-${event.value}`} className={`event event--${event.tone}`}>
-                  <span className="event-label">{event.label}</span>
-                  <span className="event-value">{event.value}</span>
-                </div>
-              ))}
-            </div>
+          <div className="terminal-output" aria-label="terminal log">
+            {events.map((event) => (
+              <div key={`${event.label}-${event.value}`} className={`terminal-line terminal-line--${event.tone}`}>
+                <span className="terminal-line-label">{event.label}</span>
+                <span className="terminal-line-value">{event.value}</span>
+              </div>
+            ))}
           </div>
 
-          <footer className="footer terminal-box">
-            <div className="section-label">links</div>
-            <div className="footer-links">
-              <a href="https://github.com/404Piyush" target="_blank" rel="noreferrer noopener">
-                github
-              </a>
-              <a href="https://404piyush.me" target="_blank" rel="noreferrer noopener">
-                portfolio
-              </a>
+          <footer className="terminal-footer" aria-label="footer">
+            <div className="terminal-line">
+              <span className="terminal-line-label">links</span>
+              <span className="terminal-line-value">
+                <a href="https://github.com/404Piyush" target="_blank" rel="noreferrer noopener">
+                  github
+                </a>{" "}
+                ·{" "}
+                <a href="https://404piyush.me" target="_blank" rel="noreferrer noopener">
+                  portfolio
+                </a>
+              </span>
             </div>
-            <div className="footer-note">404piyush.me / veltrix faucet console</div>
+            <div className="terminal-footer-note">404piyush.me / veltrix faucet console</div>
           </footer>
         </section>
       </main>

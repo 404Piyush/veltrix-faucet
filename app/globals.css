@@ -90,6 +90,11 @@ button:disabled {
   flex-wrap: wrap;
 }
 
+.terminal-nav.panel {
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
 .terminal-nav-label {
   color: var(--accent);
   font-size: 11px;
@@ -269,23 +274,52 @@ button:disabled {
   color: #bff6c6 !important;
 }
 
-.message {
-  min-height: 20px;
-  padding: 10px 2px 0;
-  color: var(--muted);
-  font-size: 12px;
+.terminal-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(125, 255, 138, 0.08);
+  background: rgba(255, 255, 255, 0.015);
   text-transform: lowercase;
 }
 
-.message--success {
+.terminal-alert-label {
+  color: var(--accent);
+  letter-spacing: 0.14em;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.terminal-alert-text {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.terminal-alert--success {
+  border-color: rgba(46, 241, 92, 0.14);
+}
+
+.terminal-alert--success .terminal-alert-text {
   color: var(--accent);
 }
 
-.message--error {
+.terminal-alert--error {
+  border-color: rgba(255, 122, 122, 0.16);
+}
+
+.terminal-alert--error .terminal-alert-text {
   color: var(--danger);
 }
 
-.message--warn {
+.terminal-alert--warn {
+  border-color: rgba(243, 204, 89, 0.14);
+}
+
+.terminal-alert--warn .terminal-alert-text {
   color: var(--warn);
 }
 
@@ -295,6 +329,68 @@ button:disabled {
 
 .footer {
   margin-top: 10px;
+}
+
+.terminal-output,
+.terminal-footer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(125, 255, 138, 0.08);
+}
+
+.terminal-output {
+  display: grid;
+  gap: 6px;
+}
+
+.terminal-line {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  text-transform: lowercase;
+  font-size: 12px;
+}
+
+.terminal-line-label {
+  color: var(--accent);
+  min-width: 78px;
+  letter-spacing: 0.14em;
+}
+
+.terminal-line-value {
+  color: var(--text);
+  word-break: break-word;
+}
+
+.terminal-line--success .terminal-line-value {
+  color: var(--accent);
+}
+
+.terminal-line--warn .terminal-line-value {
+  color: var(--warn);
+}
+
+.terminal-line--error .terminal-line-value {
+  color: var(--danger);
+}
+
+.terminal-line a {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.terminal-line a:hover {
+  color: var(--accent);
+  border-bottom-color: currentColor;
+}
+
+.terminal-footer-note {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: lowercase;
 }
 
 .footer-links {
