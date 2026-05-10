@@ -6,7 +6,7 @@
 - **API:** `/api/health`, `/api/turnstile-config`, `/api/faucet`
 - **L2 Faucet Address:** Derived from `FAUCET_PRIVATE_KEY` at runtime
 - **Balance:** Must be checked from `/api/health`; do not trust stale markdown
-- **Native Symbol:** `VELT`
+- **Native Symbol:** `VEL`
 - **CAPTCHA:** Cloudflare Turnstile
 
 ## Recent Changes
@@ -14,7 +14,7 @@
 2. Normalized private key parsing.
 3. Added homepage so the root domain no longer returns a 404.
 4. Added Turnstile verification before drips are sent.
-5. Kept default payout at `0.001 VELT` per request.
+5. Kept default payout at `0.001 VEL` per request.
 
 ## Required Env Vars
 - `FAUCET_PRIVATE_KEY`

@@ -1,6 +1,6 @@
 # Veltrix Faucet
 
-Veltrix faucet for dispensing small amounts of native `VELT` on the public L2.
+Veltrix faucet for dispensing small amounts of native `VEL` on the public L2.
 
 ## What It Does
 
