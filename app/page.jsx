@@ -27,7 +27,7 @@ function line(label, value, tone = "neutral") {
 export default function FaucetPage() {
   const [status, setStatus] = useState({ health: null, config: null, loading: true });
   const [address, setAddress] = useState("");
-  const [message, setMessage] = useState({ text: "booting...", tone: "neutral" });
+  const [toast, setToast] = useState({ text: "booting...", tone: "neutral", id: 0 });
   const [events, setEvents] = useState([
     line("BOOT", "terminal initialized", "neutral"),
     line("SYNC", "awaiting telemetry", "neutral"),
@@ -37,16 +37,25 @@ export default function FaucetPage() {
   const [syncing, setSyncing] = useState(false);
   const turnstileContainerRef = useRef(null);
   const widgetIdRef = useRef(null);
+  const toastTimerRef = useRef(null);
 
   const health = status.health;
   const config = status.config;
 
   const pushEvent = (label, value, tone = "neutral") => {
-    setEvents((current) => [line(label, value, tone), ...current].slice(0, 6));
+    setEvents((current) => [...current, line(label, value, tone)].slice(-8));
   };
 
   const showMessage = (text, tone = "neutral") => {
-    setMessage({ text, tone });
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+
+    const id = Date.now();
+    setToast({ text, tone, id });
+    toastTimerRef.current = window.setTimeout(() => {
+      setToast((current) => (current.id === id ? null : current));
+    }, 3200);
   };
 
   async function waitForTurnstile() {
@@ -204,9 +213,21 @@ export default function FaucetPage() {
     refreshStatus();
   }, []);
 
+  useEffect(() => () => {
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+  }, []);
+
   return (
     <>
       <Script id="turnstile-script" src={TURNSTILE_SRC} strategy="afterInteractive" />
+      {toast ? (
+        <div className={`terminal-toast terminal-toast--${toast.tone}`} aria-live="polite">
+          <span className="terminal-toast-label">alert</span>
+          <span className="terminal-toast-text">{toast.text}</span>
+        </div>
+      ) : null}
       <main className="shell">
         <nav className="terminal-nav panel" aria-label="Primary">
           <span className="terminal-nav-label">nav</span>
@@ -288,11 +309,6 @@ export default function FaucetPage() {
                 </button>
               </article>
             </div>
-          </div>
-
-          <div className={`terminal-alert terminal-alert--${message.tone}`} aria-live="polite">
-            <span className="terminal-alert-label">alert</span>
-            <span className="terminal-alert-text">{message.text}</span>
           </div>
 
           <div className="terminal-output" aria-label="terminal log">
