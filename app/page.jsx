@@ -199,15 +199,6 @@ export default function FaucetPage() {
     <>
       <Script id="turnstile-script" src={TURNSTILE_SRC} strategy="afterInteractive" />
       <main className="shell">
-        <header className="terminal-bar panel">
-          <div className="terminal-title">veltrix faucet</div>
-          <div className="terminal-meta">
-            <span>{health ? `chain ${health.chainId}` : "chain ..."}</span>
-            <span>{health?.ready ? "online" : status.loading ? "sync" : "check"}</span>
-            <span>VEL</span>
-          </div>
-        </header>
-
         <section className="console panel">
           <div className="prompt-row">
             <span className="prompt">root@veltrix:~$</span>
