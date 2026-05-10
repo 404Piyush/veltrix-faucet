@@ -1,25 +1,59 @@
-const express = require('express');
-const { Wallet, JsonRpcProvider, parseEther } = require('ethers');
-require('dotenv').config();
+require("dotenv").config();
+
+const express = require("express");
+const cors = require("cors");
+
+const { getAllowedOrigin, getFaucetStatus, handleDripRequest } = require("./lib/faucet");
 
 const app = express();
-app.use(require('cors')());
+const allowedOrigin = getAllowedOrigin();
+
+app.use(
+  cors({
+    origin: allowedOrigin,
+  })
+);
 app.use(express.json());
 
-const provider = new JsonRpcProvider('http://localhost:9545');
-const wallet = new Wallet(process.env.FAUCET_PRIVATE_KEY, provider);
-
-app.post('/api/faucet', async (req, res) => {
-    const { address } = req.body;
-    try {
-        const tx = await wallet.sendTransaction({
-            to: address,
-            value: parseEther('0.1')
-        });
-        res.json({ success: true, tx: tx.hash });
-    } catch (e) {
-        res.status(500).json({ error: e.message });
-    }
+app.get("/api/health", async (_req, res) => {
+  try {
+    const status = await getFaucetStatus();
+    res.json(status);
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: error.message,
+    });
+  }
 });
 
-app.listen(8080, () => console.log('Faucet running on 8080'));
+app.options("/api/faucet", (_req, res) => {
+  res.status(204).end();
+});
+
+app.post("/api/faucet", async (req, res) => {
+  const clientIp =
+    req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+    req.socket?.remoteAddress ||
+    "unknown";
+
+  try {
+    const result = await handleDripRequest({
+      address: req.body?.address,
+      ip: clientIp,
+    });
+
+    res.json(result);
+  } catch (error) {
+    const statusCode = Number.isInteger(error.statusCode) ? error.statusCode : 500;
+    res.status(statusCode).json({
+      ok: false,
+      error: error.message,
+    });
+  }
+});
+
+const port = Number.parseInt(process.env.PORT || "8080", 10);
+app.listen(port, () => {
+  console.log(`Veltrix faucet listening on ${port}`);
+});

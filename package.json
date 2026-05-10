@@ -1,10 +1,12 @@
 {
   "name": "veltrix-faucet",
   "version": "1.0.0",
-  "description": "",
+  "description": "Veltrix native token faucet API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node index.js",
+    "start": "node index.js",
+    "check": "node -e \"require('./lib/faucet')\""
   },
   "keywords": [],
   "author": "",
