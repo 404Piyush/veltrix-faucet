@@ -172,19 +172,32 @@ button:disabled {
   text-transform: lowercase;
 }
 
+.input-shell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 2px 6px;
+  border-bottom: 1px solid rgba(125, 255, 138, 0.18);
+  background: transparent;
+}
+
+.input-prefix {
+  color: var(--accent);
+  white-space: nowrap;
+}
+
 .field input {
   width: 100%;
-  border: 1px solid rgba(125, 255, 138, 0.12);
-  border-radius: 10px;
-  padding: 12px 12px;
-  background: #000;
+  border: 0;
+  border-radius: 0;
+  padding: 4px 0;
+  background: transparent;
   color: var(--text);
+  outline: none;
 }
 
 .field input:focus {
-  outline: none;
-  border-color: rgba(46, 241, 92, 0.5);
-  box-shadow: 0 0 0 3px rgba(46, 241, 92, 0.08);
+  box-shadow: none;
 }
 
 .turnstile-shell {

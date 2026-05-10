@@ -208,20 +208,24 @@ export default function FaucetPage() {
             </button>
           </div>
 
-          <div className="terminal-grid">
-            <form className="claim-form terminal-box" onSubmit={submitClaim}>
-              <label className="field">
-                <span>recipient address</span>
-                <input
-                  value={address}
-                  onChange={(event) => setAddress(event.target.value)}
-                  type="text"
-                  placeholder="0x..."
-                  autoComplete="off"
-                  spellCheck="false"
-                  required
-                />
-              </label>
+            <div className="terminal-grid">
+              <form className="claim-form terminal-box" onSubmit={submitClaim}>
+                <label className="field">
+                  <span>recipient address</span>
+                  <div className="input-shell">
+                    <span className="input-prefix">veltrix&gt;</span>
+                    <input
+                      value={address}
+                      onChange={(event) => setAddress(event.target.value)}
+                      type="text"
+                      placeholder="0x..."
+                      autoComplete="off"
+                      spellCheck="false"
+                      autoCapitalize="off"
+                      required
+                    />
+                  </div>
+                </label>
 
               <div className="turnstile-shell">
                 <div className="turnstile-label">turnstile</div>
