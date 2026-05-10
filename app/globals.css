@@ -26,9 +26,7 @@ body {
 }
 
 body {
-  background:
-    radial-gradient(circle at top, rgba(46, 241, 92, 0.08), transparent 28%),
-    linear-gradient(180deg, #000 0%, #020302 100%);
+  background: linear-gradient(180deg, #000 0%, #050505 100%);
   color: var(--text);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   overflow-x: hidden;
@@ -47,7 +45,7 @@ body::before {
       transparent 1px,
       transparent 4px
     );
-  opacity: 0.14;
+  opacity: 0.08;
 }
 
 button,
@@ -74,7 +72,7 @@ button:disabled {
 .panel {
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(4, 6, 4, 0.98), rgba(2, 3, 2, 0.98));
+  background: linear-gradient(180deg, rgba(2, 2, 2, 0.98), rgba(0, 0, 0, 0.98));
   box-shadow: var(--shadow);
 }
 
@@ -91,7 +89,7 @@ button:disabled {
   color: var(--accent);
   text-transform: lowercase;
   letter-spacing: 0.14em;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .terminal-meta {
@@ -105,16 +103,16 @@ button:disabled {
 }
 
 .console {
-  padding: 14px;
+  padding: 12px;
 }
 
 .prompt-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-bottom: 12px;
+  padding-bottom: 10px;
   border-bottom: 1px solid rgba(125, 255, 138, 0.08);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
 }
 
@@ -170,7 +168,7 @@ button:disabled {
 
 .terminal-box {
   border: 1px solid rgba(125, 255, 138, 0.1);
-  background: linear-gradient(180deg, rgba(5, 8, 5, 0.98), rgba(3, 5, 3, 0.98));
+  background: linear-gradient(180deg, rgba(2, 2, 2, 0.98), rgba(0, 0, 0, 0.98));
   border-radius: 12px;
   padding: 12px;
 }
@@ -271,6 +269,35 @@ button:disabled {
 
 .feed {
   margin-top: 12px;
+}
+
+.footer {
+  margin-top: 12px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--text);
+  text-decoration: none;
+  text-transform: lowercase;
+  border-bottom: 1px solid transparent;
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+  border-bottom-color: currentColor;
+}
+
+.footer-note {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: lowercase;
 }
 
 .event-log {

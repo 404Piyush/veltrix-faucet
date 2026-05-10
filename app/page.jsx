@@ -291,6 +291,19 @@ export default function FaucetPage() {
               ))}
             </div>
           </div>
+
+          <footer className="footer terminal-box">
+            <div className="section-label">links</div>
+            <div className="footer-links">
+              <a href="https://github.com/404Piyush" target="_blank" rel="noreferrer noopener">
+                github
+              </a>
+              <a href="https://404piyush.me" target="_blank" rel="noreferrer noopener">
+                portfolio
+              </a>
+            </div>
+            <div className="footer-note">404piyush.me / veltrix faucet console</div>
+          </footer>
         </section>
       </main>
     </>
